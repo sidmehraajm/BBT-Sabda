@@ -1,0 +1,7 @@
+{
+  "name": "LingoVoice - Language Explorer",
+  "description": "A minimalist, high-impact language learning app featuring large block buttons that provide audio insights into the significance and supporting causes of various languages using high-quality AI speech synthesis.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
