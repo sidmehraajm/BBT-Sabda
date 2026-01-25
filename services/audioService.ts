@@ -1,15 +1,31 @@
 
+/**
+ * LOCAL STATIC AUDIO PLAYER
+ * 
+ * EXPECTED FOLDER STRUCTURE:
+ * /index.html
+ * /audio/
+ *    /[language-id]/
+ *       /significance/
+ *          audio.mp3
+ *       /donation/
+ *          audio.mp3
+ */
+
 let activeAudio: HTMLAudioElement | null = null;
 
 export const playSpeech = (langId: string, type: 'significance' | 'donation'): Promise<void> => {
   return new Promise((resolve, reject) => {
+    // 1. Stop any current playback
     if (activeAudio) {
       activeAudio.pause();
       activeAudio.currentTime = 0;
     }
 
-    // Following structure: audio/[lang]/[type]/audio.mp3
-    const audioPath = `audio/${langId}/${type}/audio.mp3`;
+    // 2. Construct path (using ./ for GitHub Pages compatibility)
+    const audioPath = `./audio/${langId}/${type}/audio.mp3`;
+    
+    // 3. Initialize native browser audio
     const audio = new Audio(audioPath);
     activeAudio = audio;
 
@@ -20,10 +36,13 @@ export const playSpeech = (langId: string, type: 'significance' | 'donation'): P
 
     audio.onerror = () => {
       activeAudio = null;
-      reject(new Error(`Missing file: ${audioPath}`));
+      reject(new Error(audioPath)); // Pass path to error for UI debugging
     };
 
-    audio.play().catch(reject);
+    audio.play().catch((err) => {
+      activeAudio = null;
+      reject(new Error(audioPath));
+    });
   });
 };
 

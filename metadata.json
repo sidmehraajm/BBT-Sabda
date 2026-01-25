@@ -1,5 +1,5 @@
 {
-  "name": "LingoVoice - Language Player",
-  "description": "A minimalist language audio player for static local content.",
+  "name": "LingoPlayer",
+  "description": "Simple static audio player for language studies.",
   "requestFramePermissions": []
 }
