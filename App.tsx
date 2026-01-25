@@ -13,26 +13,24 @@ const App: React.FC = () => {
     setScreen('AUDIO_SELECTION');
   };
 
-  const handleBackToGrid = () => {
+  const handleBack = () => {
     setScreen('LANGUAGE_GRID');
     setSelectedLanguage(null);
   };
 
   return (
-    <main className="w-screen h-screen overflow-hidden bg-slate-950 text-slate-50 relative selection:bg-indigo-500">
-      <div className={`absolute inset-0 transition-transform duration-300 ease-out ${screen === 'LANGUAGE_GRID' ? 'translate-x-0' : '-translate-x-full'}`}>
+    <div className="w-screen h-screen bg-black overflow-hidden font-sans select-none touch-none">
+      {screen === 'LANGUAGE_GRID' ? (
         <LanguageGrid onSelect={handleLanguageSelect} />
-      </div>
-
-      <div className={`absolute inset-0 transition-transform duration-300 ease-out ${screen === 'AUDIO_SELECTION' ? 'translate-x-0' : 'translate-x-full'}`}>
-        {selectedLanguage && (
+      ) : (
+        selectedLanguage && (
           <AudioScreen 
             language={selectedLanguage} 
-            onBack={handleBackToGrid} 
+            onBack={handleBack} 
           />
-        )}
-      </div>
-    </main>
+        )
+      )}
+    </div>
   );
 };
 
