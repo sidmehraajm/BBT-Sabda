@@ -9,17 +9,17 @@ interface LanguageGridProps {
 
 const LanguageGrid: React.FC<LanguageGridProps> = ({ onSelect }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full bg-black">
+    <div className="flex flex-col h-screen w-full bg-black overflow-y-auto">
       {LANGUAGES.map((lang) => (
         <button
           key={lang.id}
           onClick={() => onSelect(lang)}
-          className={`${lang.color} flex flex-col items-center justify-center p-4 active:brightness-90 transition-all outline-none`}
+          className={`${lang.color} flex-1 min-h-[120px] flex flex-col items-center justify-center p-6 active:brightness-90 transition-all outline-none border-b border-black/10`}
         >
-          <span className="text-3xl font-black text-white uppercase tracking-tighter">
+          <span className="text-4xl font-black text-white uppercase tracking-tighter">
             {lang.name}
           </span>
-          <span className="text-sm font-bold text-white/40 uppercase tracking-widest mt-2">
+          <span className="text-lg font-bold text-white/60 uppercase tracking-widest mt-1">
             {lang.nativeName}
           </span>
         </button>

@@ -1,33 +1,35 @@
 
 /**
- * LOCAL STATIC AUDIO PLAYER
+ * LOCAL AUDIO PLAYER SERVICE
  * 
- * EXPECTED FOLDER STRUCTURE:
- * /index.html
- * /audio/
- *    /[language-id]/
- *       /significance/
- *          audio.mp3
- *       /donation/
- *          audio.mp3
+ * Plays audio from: ./audio/[langId]/[type]/audio.mp3
  */
 
 let activeAudio: HTMLAudioElement | null = null;
 
-export const playSpeech = (langId: string, type: 'significance' | 'donation'): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    // 1. Stop any current playback
-    if (activeAudio) {
-      activeAudio.pause();
-      activeAudio.currentTime = 0;
-    }
+export const stopAudio = () => {
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+    activeAudio = null;
+  }
+};
 
-    // 2. Construct path (using ./ for GitHub Pages compatibility)
-    const audioPath = `./audio/${langId}/${type}/audio.mp3`;
-    
-    // 3. Initialize native browser audio
+export const playSpeech = async (
+  langId: string, 
+  type: 'significance' | 'donation'
+): Promise<void> => {
+  stopAudio();
+
+  const audioPath = `./audio/${langId}/${type}/audio.mp3`;
+  
+  return new Promise<void>((resolve, reject) => {
     const audio = new Audio(audioPath);
     activeAudio = audio;
+
+    audio.oncanplaythrough = () => {
+      audio.play().catch(reject);
+    };
 
     audio.onended = () => {
       activeAudio = null;
@@ -36,20 +38,7 @@ export const playSpeech = (langId: string, type: 'significance' | 'donation'): P
 
     audio.onerror = () => {
       activeAudio = null;
-      reject(new Error(audioPath)); // Pass path to error for UI debugging
+      reject(new Error(`File not found: ${audioPath}`));
     };
-
-    audio.play().catch((err) => {
-      activeAudio = null;
-      reject(new Error(audioPath));
-    });
   });
-};
-
-export const stopAudio = () => {
-  if (activeAudio) {
-    activeAudio.pause();
-    activeAudio.currentTime = 0;
-    activeAudio = null;
-  }
 };
